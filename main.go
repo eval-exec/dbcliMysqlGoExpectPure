@@ -35,7 +35,7 @@ func main() {
 	var start = 0
 	var regOut = regexp.MustCompile(" ")
 	var regIn = regexp.MustCompile(" ")
-	logfile, err := os.Create("mysql.log")
+	logfile, err := os.OpenFile("mysql.log",os.O_RDWR|os.O_CREATE,0755)
 	if err != nil {
 		log.Fatal("logfile error ")
 	}
