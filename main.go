@@ -1,8 +1,8 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
-	"io"
 	"os/exec"
 	"strings"
 
@@ -16,8 +16,9 @@ func main() {
 	var out string
 	var outErr string
 	var getcommands string
-
-
+	// var stdin io.Reader
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
 
 	var datatext string
 	var execCommand *exec.Cmd
@@ -42,14 +43,18 @@ func main() {
 			commandsSlice := strings.Fields(getcommands)
 			execCommand = exec.Command(commandsSlice[0], commandsSlice[1:]...)
 
-			outputBtte, err := execCommand.CombinedOutput()
+			execCommand.Stdin = strings.NewReader(getcommands)
+			execCommand.Stdout = &stdout
+			execCommand.Stderr = &stderr
+
+			outErr = stderr.String()
+			err := execCommand.Run()
 			if err != nil {
 				outErr = fmt.Sprint(err)
 			} else {
-				outErr = ""
+				outErr = fmt.Sprint(err) + outErr
 			}
-			out = string(outputBtte)
-
+			out = stdout.String()
 
 			datatext = fmt.Sprintf("%s\n%s", out, outErr)
 
@@ -76,32 +81,7 @@ func main() {
 	}
 }
 
-func copyAndCapture(w io.Writer, r io.Reader) ([]byte, error) {
-	var out []byte
-	buf := make([]byte, 1024, 1024)
-	for {
-		n, err := r.Read(buf[:])
-		if n > 0 {
-			d := buf[:n]
-			out = append(out, d...)
-			_, err := w.Write(d)
-			if err != nil {
-				return out, err
-			}
-		}
-		if err != nil {
-			// Read returns io.EOF at the end of file, which is not an error for us
-			if err == io.EOF {
-				err = nil
-			}
-			return out, err
-		}
-	}
-}
-
-func debug(str interface{}, stxr string) {
-	fmt.Println("--------------------------------------------------------")
-	fmt.Sprintln(str)
-	fmt.Println(stxr)
-	fmt.Println("--------------------------------------------------------")
+func debug(str interface{}, stxr string) string {
+	x := "-------------------------------------------------------------------\n" + fmt.Sprint(str) + "\n" + stxr + "\n---------------------------------------------"
+	return x
 }
