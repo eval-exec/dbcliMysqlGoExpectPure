@@ -34,7 +34,7 @@ func main() {
 	var chanErr <-chan error
 	var start = 0
 	var regOut = regexp.MustCompile(" ")
-	var regIn = regexp.MustCompile(" ")
+	// var regIn = regexp.MustCompile("]>")
 	logfile, err := os.OpenFile("mysql.log",os.O_RDWR|os.O_CREATE,0755)
 	if err != nil {
 		log.Fatal("logfile error ")
@@ -75,8 +75,10 @@ func main() {
 				}
 			} else if start != 0 {
 				logger.Println(start, "is start")
-				e.Expect(regIn,-1)
-				err = e.Send(getcommands)
+
+
+
+				err = e.Send(getcommands + "\n")
 				logger.Println(getcommands, "send")
 				if err != nil {
 					logger.Println(err)
