@@ -1,28 +1,46 @@
 package main
 
 import (
-	"bytes"
+	// "bytes"
 	"fmt"
-	"os/exec"
-	"strings"
+	"log"
+	"os"
+	"regexp"
+
+	// "os/exec"
+	// "strings"
 
 	"github.com/gdamore/tcell"
 	_ "github.com/go-sql-driver/mysql"
+	expect "github.com/google/goexpect"
 	"github.com/rivo/tview"
 )
 
 func main() {
 
 	var out string
-	var outErr string
+	// var outErr string
 	var getcommands string
 	// var stdin io.Reader
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
+	// var stdout []byte
+	// var stderr []byte
 
 	var datatext string
-	var execCommand *exec.Cmd
+	// var execCommand *exec.Cmd
 	datatext = "ok I am data text"
+	var e *expect.GExpect
+	var err error
+
+	var chanErr <-chan error
+	var start = 0
+	var regOut = regexp.MustCompile(" ")
+	var regIn = regexp.MustCompile(" ")
+	logfile, err := os.Create("mysql.log")
+	if err != nil {
+		log.Fatal("logfile error ")
+	}
+	logger := log.New(logfile, "", log.Llongfile)
+	logger.SetFlags(log.LstdFlags)
 
 	newPrimitive := func(text string) tview.Primitive {
 		return tview.NewTextView().
@@ -40,23 +58,43 @@ func main() {
 			main.SetText("")
 
 			getcommands = tinput.GetText()
-			commandsSlice := strings.Fields(getcommands)
-			execCommand = exec.Command(commandsSlice[0], commandsSlice[1:]...)
 
-			execCommand.Stdin = strings.NewReader(getcommands)
-			execCommand.Stdout = &stdout
-			execCommand.Stderr = &stderr
+			logger.Println(getcommands, "is getcommands")
 
-			outErr = stderr.String()
-			err := execCommand.Run()
-			if err != nil {
-				outErr = fmt.Sprint(err)
-			} else {
-				outErr = fmt.Sprint(err) + outErr
+			if start == 0 {
+				logger.Println(start, "is start")
+
+				e, chanErr, err = expect.Spawn(getcommands, -1)
+				logger.Println(getcommands, "spawn")
+				if err != nil {
+					logger.Println(err)
+				}
+				if getcommands == "mysql" {
+					logger.Println(getcommands, " is mysql commands")
+					start = 1
+				}
+			} else if start != 0 {
+				logger.Println(start, "is start")
+				e.Expect(regIn,-1)
+				err = e.Send(getcommands)
+				logger.Println(getcommands, "send")
+				if err != nil {
+					logger.Println(err)
+				}
 			}
-			out = stdout.String()
+			result, stringx, err := e.Expect(regOut, -1)
+			logger.Println(result, stringx, err, "is e.rxprct output")
 
-			datatext = fmt.Sprintf("%s\n%s", out, outErr)
+			if err != nil {
+				logger.Println(err)
+			}
+
+			if err != nil {
+				logger.Println(err)
+			}
+
+			out = result
+			datatext = fmt.Sprintf("%s\n", out)
 
 			main.SetText(datatext)
 			tinput.SetText("")

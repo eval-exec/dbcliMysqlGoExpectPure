@@ -1,0 +1,50 @@
+2019/05/18 17:07:52 ls is getcommands
+2019/05/18 17:07:52 0 is start
+2019/05/18 17:07:52 ls spawn
+2019/05/18 17:07:52  [] expect: Process not running is e.rxprct output
+2019/05/18 17:07:52 expect: Process not running
+2019/05/18 17:07:52 expect: Process not running
+2019/05/18 17:07:54 ls -a is getcommands
+2019/05/18 17:07:54 0 is start
+2019/05/18 17:07:54 ls -a spawn
+2019/05/18 17:07:54 .   config  .gitignore	.idea	 mysql.log  test
+..  .git    goexpect	main.go  osExec
+ [ ] <nil> is e.rxprct output
+2019/05/18 17:07:56 ls is getcommands
+2019/05/18 17:07:56 0 is start
+2019/05/18 17:07:56 ls spawn
+2019/05/18 17:07:56 config	goexpect  main.go  mysql.log  osExec  test
+ [ ] <nil> is e.rxprct output
+2019/05/18 17:07:58 ls -al is getcommands
+2019/05/18 17:07:58 0 is start
+2019/05/18 17:07:58 ls -al spawn
+2019/05/18 17:07:58 total 44
+ [ ] <nil> is e.rxprct output
+2019/05/18 17:08:00 ls -a is getcommands
+2019/05/18 17:08:00 0 is start
+2019/05/18 17:08:00 ls -a spawn
+2019/05/18 17:08:00 .   config  .gitignore	.idea	 mysql.log  test
+..  .git    goexpect	main.go  osExec
+ [ ] <nil> is e.rxprct output
+2019/05/18 17:08:02 ls  is getcommands
+2019/05/18 17:08:02 0 is start
+2019/05/18 17:08:02 ls  spawn
+2019/05/18 17:08:02 config	goexpect  main.go  mysql.log  osExec  test
+ [ ] <nil> is e.rxprct output
+2019/05/18 17:08:04 ls -al is getcommands
+2019/05/18 17:08:04 0 is start
+2019/05/18 17:08:04 ls -al spawn
+2019/05/18 17:08:04 total 44
+ [ ] <nil> is e.rxprct output
+2019/05/18 17:09:01 mysql is getcommands
+2019/05/18 17:09:01 0 is start
+2019/05/18 17:09:01 mysql spawn
+2019/05/18 17:09:01 mysql  is mysql commands
+2019/05/18 17:09:01 (B[0;1mWelcome to the MariaDB monitor.  Commands end with ; or \g.
+ [ ] <nil> is e.rxprct output
+2019/05/18 17:09:07 show databases; is getcommands
+2019/05/18 17:09:07 1 is start
+2019/05/18 17:09:07 show databases; send
+2019/05/18 17:10:07  [] expect: timer expired after 60 seconds is e.rxprct output
+2019/05/18 17:10:07 expect: timer expired after 60 seconds
+2019/05/18 17:10:07 expect: timer expired after 60 seconds
